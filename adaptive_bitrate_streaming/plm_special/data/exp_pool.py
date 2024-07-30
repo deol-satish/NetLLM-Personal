@@ -14,6 +14,10 @@ class ExperiencePool:
         self.actions.append(action)
         self.rewards.append(reward)
         self.dones.append(done)
+        print("state",state)
+        print("action",action)
+        print("reward",reward)
+        print("done",done)
 
     def __len__(self):
         return len(self.states)

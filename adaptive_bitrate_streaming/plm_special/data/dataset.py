@@ -27,6 +27,8 @@ class ExperienceDataset(Dataset):
             sample_step = max_length
 
         self.exp_pool = exp_pool
+        print("type(exp_pool)",type(exp_pool))
+        print("len(exp_pool)",len(exp_pool))
         self.exp_pool_size = len(exp_pool)
         self.gamma = gamma
         self.scale = scale
