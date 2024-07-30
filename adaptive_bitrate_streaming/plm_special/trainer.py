@@ -19,6 +19,10 @@ class Trainer:
         self.batch_size = batch_size
         self.grad_accum_steps = grad_accum_steps
         self.lr_scheduler = lr_scheduler
+        print("======================================================")
+        print("Batch_Size:",batch_size)
+        print("grad_accum_steps:",grad_accum_steps)
+        print("======================================================")
         
         self.exp_dataset_info = Munch(exp_dataset.exp_dataset_info)
         self.dataloader = DataLoader(exp_dataset, batch_size, shuffle=True, pin_memory=True)
@@ -29,16 +33,23 @@ class Trainer:
 
         train_start = time.time()
         dataset_size = len(self.dataloader)
+        print("======================================================")
+        print("dataset_size:",dataset_size)
+        print("======================================================")
 
         self.model.train()
         for step, batch in enumerate(self.dataloader):
             train_loss = self.train_step(batch)
             train_losses.append(train_loss.item())
+            print("======================================================")
+            print("train_loss.item():",train_loss.item())
+            print("======================================================")
 
             # perform gradient accumulation update
             train_loss = train_loss / self.grad_accum_steps
             train_loss.backward()
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), .25)
+
             if ((step + 1) % self.grad_accum_steps == 0) or (step + 1 == dataset_size):
                 self.optimizer.step()
                 self.optimizer.zero_grad(set_to_none=True)

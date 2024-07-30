@@ -232,6 +232,20 @@ def run(args):
 
 
 if __name__ == '__main__':
+    import torch
+
+    torch.cuda.set_per_process_memory_fraction(0.5, 0)
+    torch.cuda.empty_cache()
+
+    # Test allocation
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    try:
+        x = torch.randn(10000, 10000, device=device)
+        print("Memory allocation successful!")
+    except RuntimeError as e:
+        print(f"Memory allocation failed: {e}")
+
+
     parser = ArgumentParser(description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter)
     # training dataset settings
     parser.add_argument('--exp-pool-path', help='the path storing the experience pool file for training', default='artifacts/exp_pools/exp_pool.pkl')
