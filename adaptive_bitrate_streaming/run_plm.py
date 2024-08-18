@@ -69,6 +69,7 @@ def load_model(args, model, model_dir):
 
 
 def adapt(args, model, exp_dataset, exp_dataset_info, eval_env_settings, checkpoint_dir, best_model_dir, eval_process_reward_fn):
+    print(f"Starting adaptation with {args.num_epochs} epochs")
     optimizer = AdamW(
         model.parameters(),
         lr=args.lr,
@@ -87,6 +88,7 @@ def adapt(args, model, exp_dataset, exp_dataset_info, eval_env_settings, checkpo
 
     total_train_losses = []
     for epoch in range(args.num_epochs):
+        print("Epoch Started-----------------------------")
         train_logs, train_losses = trainer.train_epoch()
         total_train_losses.extend(train_losses)
         print('='* 20, f'Training Iteration #{epoch}', '=' * 20)
@@ -101,6 +103,7 @@ def adapt(args, model, exp_dataset, exp_dataset_info, eval_env_settings, checkpo
             print('Checkpoint saved at:', checkpoint_dir_epoch)
 
         if epoch % args.eval_per_epoch == 0:
+            print("Evaluating model and save best model...")
             eval_logs = evaluate_on_env(args, env_settings=eval_env_settings, model=model, target_return=target_return, max_ep_num=args.trace_num,
                                         process_reward_fn=eval_process_reward_fn)
             episodes_return = eval_logs['episodes_return']
@@ -113,8 +116,10 @@ def adapt(args, model, exp_dataset, exp_dataset_info, eval_env_settings, checkpo
             print('>' * 10, 'Evaluation Information')
             pprint(eval_logs)
     # save training losses
+    print(f"Saving training losses to {os.path.join(checkpoint_dir, 'train_losses.txt')}")
     train_losses_path = os.path.join(checkpoint_dir, 'train_losses.txt')
     np.savetxt(train_losses_path, total_train_losses, fmt='%.6f', delimiter='\n')
+    print("Epoch Ended-----------------------------")
 
 
 def test(args, model, exp_dataset_info, env_settings, model_dir, result_dir, test_process_reward_fn):
