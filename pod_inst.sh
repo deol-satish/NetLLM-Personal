@@ -18,10 +18,13 @@ sudo scp -P 22177 -p -i ~/.ssh/id_ed25519 -r NetLLM-Personal root@69.30.85.48:
 
 ssh root@69.30.85.24 -p 22163 -i ~/.ssh/id_ed25519
 
+scp -P 22001 -p -i ~/.ssh/id_ed25519 -r root@69.30.85.111:/workspace/NetLLM/adaptive_bitrate_streaming /runpodmodelfiles
+scp -P 22001 -p -i ~/.ssh/id_ed25519 -r root@69.30.85.111:/workspace/NetLLM/adaptive_bitrate_streaming/artifacts /runpodresults
+ssh root@69.30.85.111 -p 22001 -i ~/.ssh/id_ed25519
 
 
 python run_plm.py --adapt --grad-accum-steps 32 --plm-type llama --plm-size base --rank 128 --device cuda:0 --device-out cuda:1 --lr 0.0001 --warmup-steps 2000 --num-epochs 80 --eval-per-epoch 2 
-python run_plm.py --adapt --grad-accum-steps 32 --plm-type llama --plm-size base --rank 128 --device cuda:0 --device-out cuda:1 --lr 0.0001 --warmup-steps 1000 --num-epochs 20 --eval-per-epoch 2
+python run_plm.py --adapt --grad-accum-steps 32 --plm-type llama --plm-size base --rank 128 --device cuda:0 --device-out cuda:1 --lr 0.0001 --warmup-steps 2000 --num-epochs 80 --eval-per-epoch 2
 
 
 

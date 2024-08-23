@@ -20,6 +20,7 @@ def load_traces(cooked_trace_folder, load_mahimahi_ptrs=True):
             if file_path.endswith('.pkl'):
                 if load_mahimahi_ptrs:
                     all_mahimahi_ptrs = pickle.load(open(file_path, 'rb'))
+                    print("all_mahimahi_ptrs: ",all_mahimahi_ptrs)
                 continue
 
             val_folder_name = os.path.basename( os.path.normpath( subdir ) )

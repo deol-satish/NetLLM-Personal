@@ -1,5 +1,5 @@
 python -m pip install --upgrade pip
-pip intsall munch
+pip install munch
 pip install peft==0.6.2
 pip install yacs
 pip install openprompt==1.0.1

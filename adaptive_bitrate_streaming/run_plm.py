@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import torch
 import pickle
+import joblib
 
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pprint import pprint
@@ -87,12 +88,21 @@ def adapt(args, model, exp_dataset, exp_dataset_info, eval_env_settings, checkpo
     best_eval_return = 0.
 
     total_train_losses = []
+    total_logs_save={}
     for epoch in range(args.num_epochs):
         print("Epoch Started-----------------------------")
         train_logs, train_losses = trainer.train_epoch()
         total_train_losses.extend(train_losses)
         print('='* 20, f'Training Iteration #{epoch}', '=' * 20)
         print('>' * 10, 'Training Information:')
+        print("save trainlogs of epoch into save variables")
+        total_logs_save[epoch]=train_logs
+        joblib.dump(total_logs_save,'train_logs.joblib')
+        with open('train_logs.pkl', 'wb') as file:
+            pickle.dump(total_logs_save, file)
+        print("Saved Training logs should be done")
+
+
         pprint(train_logs)
 
         if epoch % args.save_checkpoint_per_epoch == 0:  # save checkpoint
